@@ -5,9 +5,9 @@ schema = {
   "properties": {
     "token": {
        "type":"string"
-        },
+        }
+    },
     "required": [
         "token"
       ]
-  }
 }

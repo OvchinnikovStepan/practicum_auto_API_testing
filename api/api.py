@@ -16,11 +16,11 @@ class Api:
 
     @allure.step("Отправить POST-запрос")
     def post(self, url: str, endpoint: str, params: dict = None,
-             json_body: dict = None):
+             json_body: dict = None, headers: dict = {}):
         with allure.step(f"POST-запрос на url: {url}{endpoint}"
                          f"\n тело запроса: \n {json_body}"):
             self.response = requests.post(url=f"{url}{endpoint}",
-                                          headers=self._HEADERS,
+                                          headers=self._HEADERS.update(headers),
                                           params=params,
                                           json=json_body,
                                           timeout=self._TIMEOUT)
@@ -58,8 +58,26 @@ class Api:
         return self
 
     def get_payload(self, keys: list):
-        """Получаем payload, переходя по ключам,
-        возвращаем полученный payload"""
+        """Получаем payload переходя по ключам,
+        и возвращаем полученный payload"""
         response = self.response.json()
-        payload = self.json_parser.find_json_vertex(response, keys)       
+        payload = get_data(keys, response)
         return payload
+    
+    @allure.step("Отправить GET запрос")
+    def get(self, url: str, endpoint: str):
+        with allure.step(f"GET запрос на url: {url}{endpoint}"):
+            self.response = requests.get(url=f"{url}{endpoint}",
+                                         headers=self._HEADERS,
+                                         timeout=self._TIMEOUT)
+        log(response=self.response)
+        return self
+    
+    @allure.step("Отправить DELETE запрос")
+    def delete(self, url: str, endpoint: str,headers: dict = {}):
+        with allure.step(f"DELETE запрос на url: {url}{endpoint}"):
+            self.response = requests.get(url=f"{url}{endpoint}",
+                                         headers=self._HEADERS.update(headers),
+                                         timeout=self._TIMEOUT)
+        log(response=self.response)
+        return self

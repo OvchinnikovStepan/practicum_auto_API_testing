@@ -1,7 +1,7 @@
 import allure
 from api.api import Api
 from model.single_user_model import  ResponseSingleUserModel
-from model.create import RequestCreateUserModel, ResponseCreateUserModel
+from model.create_model import RequestCreateUserModel, ResponseCreateUserModel
 class ReqresApi(Api):
 
     """URl"""
@@ -27,3 +27,7 @@ class ReqresApi(Api):
                                        avatar=payload['data']['avatar'],
                                        url=payload['support']['url'],
                                        text=payload['support']['text'])
+    
+    def reqres_single_user(self, user_id: int):
+        return self.get(url=self._URL,
+                        endpoint=self._ENDPOINT + str(user_id))
